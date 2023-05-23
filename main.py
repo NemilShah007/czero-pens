@@ -64,16 +64,17 @@ async def get_product(sku: str):
 
 @app.put("/inventory/{sku}")
 async def update_product(sku: str, quantity: int = None, description: str = None):
-    if quantity and description:
-        inventory[sku]["quantity"] = quantity
-        inventory[sku]["description"] = description
-        return inventory[sku]
-    elif quantity:
-        inventory[sku]["quantity"] = quantity
-        return inventory[sku]
-    elif description:
-        inventory[sku]["description"] = description
-        return inventory[sku]
+    if sku in inventory:
+        if quantity and description:
+            inventory[sku]["quantity"] = quantity
+            inventory[sku]["description"] = description
+            return inventory[sku]
+        elif quantity:
+            inventory[sku]["quantity"] = quantity
+            return inventory[sku]
+        elif description:
+            inventory[sku]["description"] = description
+            return inventory[sku]
     else:
         return {"error": "Item not found"}
 
@@ -110,7 +111,7 @@ async def buy_product(items: dict):
 async def search_inventory(query: str):
     results = []
     for sku, product in inventory.items():
-        if query.lower() in product["productName"].lower() or query.lower() in product["variant"].lower():
+        if query.lower() in product["productName"].lower() or query.lower() in product["variant"].lower() or query in str(product["quantity"]):
             results.append(product)
     return {"results": results}
 
