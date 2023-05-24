@@ -111,7 +111,7 @@ async def buy_product(items: dict):
 async def search_inventory(query: str):
     results = []
     for sku, product in inventory.items():
-        if query.lower() in product["productName"].lower() or query.lower() in product["variant"].lower() or query in str(product["quantity"]):
+        if query.lower() in product["productName"].lower() or query.lower() in product["variant"].lower() or query in str(product["quantity"]) or query.lower() in product["description"].lower():
             results.append(product)
     return {"results": results}
 
